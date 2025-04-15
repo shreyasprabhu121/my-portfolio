@@ -574,4 +574,279 @@
         <!-- Social Icons -->
     </div>
 </section>
+
+<!-- Add this before the closing </body> tag in your index.html file -->
+
+<!-- Chatbot HTML Structure -->
+<div id="chatbot-container" class="fixed bottom-6 right-6 z-50">
+    <!-- Chatbot Icon Button -->
+    <button id="chatbot-toggle" class="w-14 h-14 rounded-full bg-indigo-600 text-white shadow-lg flex items-center justify-center hover:bg-indigo-700 transition-all duration-300 focus:outline-none">
+      <i id="chatbot-icon-open" class="fas fa-comment-dots text-xl"></i>
+      <i id="chatbot-icon-close" class="fas fa-times text-xl hidden"></i>
+    </button>
+    
+    <!-- Chatbot Dialog Box -->
+    <div id="chatbot-dialog" class="hidden absolute bottom-20 right-0 w-80 md:w-96 bg-white rounded-lg shadow-xl overflow-hidden transform transition-transform duration-300 origin-bottom-right">
+      <!-- Chatbot Header -->
+      <div class="gradient-bg p-4 text-white flex items-center justify-between">
+        <div class="flex items-center">
+          <div class="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center mr-3">
+            <i class="fas fa-robot text-yellow-300"></i>
+          </div>
+          <h3 class="font-medium">Portfolio Assistant</h3>
+        </div>
+        <button id="chatbot-minimize" class="text-white hover:text-gray-200 focus:outline-none">
+          <i class="fas fa-minus"></i>
+        </button>
+      </div>
+      
+      <!-- Chatbot Messages Container -->
+      <div id="chatbot-messages" class="h-80 overflow-y-auto p-4 bg-gray-50 space-y-4">
+        <!-- Welcome Message -->
+        <div class="flex items-start">
+          <div class="w-8 h-8 rounded-full gradient-bg flex-shrink-0 flex items-center justify-center">
+            <i class="fas fa-robot text-xs text-white"></i>
+          </div>
+          <div class="ml-2 bg-white p-3 rounded-lg shadow-sm max-w-3/4">
+            <p class="text-gray-700 text-sm">Hi there! I'm Shreyas's AI assistant. How can I help you today?</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Chatbot Input Area -->
+      <div class="border-t border-gray-200 p-3 bg-white">
+        <form id="chatbot-form" class="flex items-center">
+          <input
+            id="chatbot-input"
+            type="text"
+            placeholder="Type your message..."
+            class="flex-1 border border-gray-300 rounded-l-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          >
+          <button
+            type="submit"
+            class="bg-indigo-600 text-white rounded-r-lg py-2 px-4 text-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Add this script before the closing </body> tag -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const chatbotToggle = document.getElementById('chatbot-toggle');
+      const chatbotIconOpen = document.getElementById('chatbot-icon-open');
+      const chatbotIconClose = document.getElementById('chatbot-icon-close');
+      const chatbotDialog = document.getElementById('chatbot-dialog');
+      const chatbotMinimize = document.getElementById('chatbot-minimize');
+      const chatbotForm = document.getElementById('chatbot-form');
+      const chatbotInput = document.getElementById('chatbot-input');
+      const chatbotMessages = document.getElementById('chatbot-messages');
+      
+      let isOpen = false;
+      
+      // Toggle chatbot visibility
+      function toggleChatbot() {
+        if (!isOpen) {
+          // Open chatbot
+          chatbotDialog.classList.remove('hidden');
+          // Force a reflow before applying the transform
+          void chatbotDialog.offsetWidth;
+          chatbotDialog.style.transform = 'scale(1)';
+          
+          chatbotIconOpen.classList.add('hidden');
+          chatbotIconClose.classList.remove('hidden');
+          chatbotInput.focus();
+          isOpen = true;
+        } else {
+          // Close chatbot
+          chatbotDialog.style.transform = 'scale(0.95)';
+          
+          setTimeout(() => {
+            chatbotDialog.classList.add('hidden');
+          }, 300);
+          
+          chatbotIconOpen.classList.remove('hidden');
+          chatbotIconClose.classList.add('hidden');
+          isOpen = false;
+        }
+      }
+      
+      // Initialize styles for closed state
+      chatbotDialog.style.transform = 'scale(0.95)';
+      
+      // Add event listeners
+      chatbotToggle.addEventListener('click', toggleChatbot);
+      chatbotMinimize.addEventListener('click', toggleChatbot);
+      
+      // Handle form submission
+      chatbotForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const userMessage = chatbotInput.value.trim();
+        if (!userMessage) return;
+        
+        // Add user message to chat
+        addMessage('user', userMessage);
+        
+        // Clear input field
+        chatbotInput.value = '';
+        
+        // Show loading indicator
+        showLoading();
+        
+        try {
+          // Replace with your actual API endpoint
+          const response = await fetchChatbotResponse(userMessage);
+          
+          // Remove loading indicator
+          removeLoading();
+          
+          // Add bot response to chat
+          addMessage('bot', response);
+        } catch (error) {
+          // Remove loading indicator
+          removeLoading();
+          
+          // Show error message
+          addMessage('bot', "Sorry, I couldn't process your request. Please try again later.");
+          console.error('Chatbot API error:', error);
+        }
+        
+        // Scroll to bottom
+        scrollToBottom();
+      });
+      
+      // Add a message to the chat
+      function addMessage(type, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'flex items-start';
+        
+        if (type === 'user') {
+          messageDiv.classList.add('justify-end');
+          messageDiv.innerHTML = `
+            <div class="mr-2 bg-indigo-100 p-3 rounded-lg shadow-sm max-w-3/4">
+              <p class="text-gray-700 text-sm">${escapeHTML(content)}</p>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-indigo-600 flex-shrink-0 flex items-center justify-center">
+              <i class="fas fa-user text-xs text-white"></i>
+            </div>
+          `;
+        } else {
+          messageDiv.innerHTML = `
+            <div class="w-8 h-8 rounded-full gradient-bg flex-shrink-0 flex items-center justify-center">
+              <i class="fas fa-robot text-xs text-white"></i>
+            </div>
+            <div class="ml-2 bg-white p-3 rounded-lg shadow-sm max-w-3/4">
+              <p class="text-gray-700 text-sm">${escapeHTML(content)}</p>
+            </div>
+          `;
+        }
+        
+        chatbotMessages.appendChild(messageDiv);
+        scrollToBottom();
+      }
+      
+      // Show loading indicator
+      function showLoading() {
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = 'chatbot-loading';
+        loadingDiv.className = 'flex items-start';
+        loadingDiv.innerHTML = `
+          <div class="w-8 h-8 rounded-full gradient-bg flex-shrink-0 flex items-center justify-center">
+            <i class="fas fa-robot text-xs text-white"></i>
+          </div>
+          <div class="ml-2 bg-white p-3 rounded-lg shadow-sm">
+            <div class="flex space-x-2">
+              <div class="w-2 h-2 rounded-full bg-gray-300 animate-pulse"></div>
+              <div class="w-2 h-2 rounded-full bg-gray-300 animate-pulse" style="animation-delay: 0.2s"></div>
+              <div class="w-2 h-2 rounded-full bg-gray-300 animate-pulse" style="animation-delay: 0.4s"></div>
+            </div>
+          </div>
+        `;
+        
+        chatbotMessages.appendChild(loadingDiv);
+        scrollToBottom();
+      }
+      
+      // Remove loading indicator
+      function removeLoading() {
+        const loadingElement = document.getElementById('chatbot-loading');
+        if (loadingElement) {
+          loadingElement.remove();
+        }
+      }
+      
+      // Scroll chat to bottom
+      function scrollToBottom() {
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+      }
+      
+      // Escape HTML to prevent XSS
+      function escapeHTML(text) {
+        return text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+      
+      // Mock API call - Replace with your actual API endpoint
+      async function fetchChatbotResponse(message) {
+        // You should replace this with your actual API endpoint
+        const API_URL = 'https://your-api-endpoint.com/chat';
+        
+        try {
+          // Simulating API delay
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // For demonstration - replace with actual API call
+          /*
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message })
+          });
+          
+          if (!response.ok) {
+            throw new Error('API request failed');
+          }
+          
+          const data = await response.json();
+          return data.response;
+          */
+          
+          // Demo responses - replace with actual API call
+          const demoResponses = {
+            'hi': 'Hello! How can I help you with Shreyas\'s portfolio?',
+            'hello': 'Hi there! Feel free to ask me about Shreyas\'s experience, skills, or projects.',
+            'skills': 'Shreyas specializes in Java, Spring Boot, Microservices, RESTful APIs, and cloud technologies like AWS and Azure.',
+            'experience': 'Shreyas has over 6 years of experience working with companies like NTT Data, Wipro, and Capgemini on projects for clients such as U.S. Bank and T-Mobile.',
+            'contact': 'You can reach Shreyas via email at shreyasprabhu121@gmail.com or through LinkedIn.',
+            'projects': 'Shreyas has worked on Commercial Loan Systems, Data Reconciliation platforms, and ETL Process Optimization projects.',
+            'default': 'Thanks for your message! Currently the AI integration is in Progress. Will get back to you soon!!'
+          };
+          
+          // Check for matching keywords
+          const lowerCaseMessage = message.toLowerCase();
+          for (const [keyword, response] of Object.entries(demoResponses)) {
+            if (lowerCaseMessage.includes(keyword)) {
+              return response;
+            }
+          }
+          
+          return demoResponses.default;
+          
+        } catch (error) {
+          console.error('API error:', error);
+          throw error;
+        }
+      }
+    });
+  </script>
 </body>
