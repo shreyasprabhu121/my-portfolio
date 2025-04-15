@@ -586,7 +586,7 @@
     </button>
     
     <!-- Chatbot Dialog Box -->
-    <div id="chatbot-dialog" class="hidden absolute bottom-20 right-0 w-80 md:w-96 bg-white rounded-lg shadow-xl overflow-hidden transform transition-transform duration-300 origin-bottom-right">
+    <div id="chatbot-dialog" class="hidden absolute bottom-20 right-0 w-72 sm:w-80 md:w-96 bg-white rounded-lg shadow-xl overflow-hidden transform transition-transform duration-300 origin-bottom-right">
       <!-- Chatbot Header -->
       <div class="gradient-bg p-4 text-white flex items-center justify-between">
         <div class="flex items-center">
@@ -601,7 +601,7 @@
       </div>
       
       <!-- Chatbot Messages Container -->
-      <div id="chatbot-messages" class="h-80 overflow-y-auto p-4 bg-gray-50 space-y-4">
+      <div id="chatbot-messages" class="h-72 sm:h-80 overflow-y-auto p-4 bg-gray-50 space-y-4">
         <!-- Welcome Message -->
         <div class="flex items-start">
           <div class="w-8 h-8 rounded-full gradient-bg flex-shrink-0 flex items-center justify-center">
@@ -624,7 +624,7 @@
           >
           <button
             type="submit"
-            class="bg-indigo-600 text-white rounded-r-lg py-2 px-4 text-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            class="bg-indigo-600 text-white rounded-r-lg py-2 px-4 text-sm hover:bg-indigo-700 focus:outline-none flex-shrink-0 w-10 h-10 flex items-center justify-center"
           >
             <i class="fas fa-paper-plane"></i>
           </button>
@@ -673,6 +673,21 @@
           isOpen = false;
         }
       }
+      
+      // Handle window resize for mobile adjustments
+      function handleResize() {
+        if (window.innerWidth < 640) { // Mobile breakpoint
+          chatbotDialog.style.maxWidth = '90vw';
+          chatbotDialog.style.right = '5vw';
+        } else {
+          chatbotDialog.style.maxWidth = '';
+          chatbotDialog.style.right = '0';
+        }
+      }
+      
+      // Call once on load and add resize listener
+      handleResize();
+      window.addEventListener('resize', handleResize);
       
       // Initialize styles for closed state
       chatbotDialog.style.transform = 'scale(0.95)';
