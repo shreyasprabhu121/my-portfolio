@@ -179,6 +179,15 @@
                                 <div class="skill-progress" style="width: 88%"></div>
                             </div>
                         </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">GenAI</span>
+                                <span class="text-gray-600">75%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 75%"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -200,10 +209,10 @@
                         <div>
                             <div class="flex justify-between mb-2">
                                 <span class="font-medium">AWS/Azure</span>
-                                <span class="text-gray-600">75%</span>
+                                <span class="text-gray-600">50%</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-progress" style="width: 75%"></div>
+                                <div class="skill-progress" style="width: 50%"></div>
                             </div>
                         </div>
                         <div>
@@ -222,6 +231,15 @@
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Log Monitoring</span>
+                                <span class="text-gray-600">80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
                             </div>
                         </div>
                     </div>
@@ -575,8 +593,6 @@
     </div>
 </section>
 
-<!-- Add this before the closing </body> tag in your index.html file -->
-
 <!-- Chatbot HTML Structure -->
 <div id="chatbot-container" class="fixed bottom-6 right-6 z-50">
     <!-- Chatbot Icon Button -->
@@ -613,7 +629,7 @@
         </div>
       </div>
       
-      <!-- Chatbot Input Area -->
+      <!-- Chatbot Input Area - Fixed for mobile -->
       <div class="border-t border-gray-200 p-3 bg-white">
         <form id="chatbot-form" class="flex items-center">
           <input
@@ -624,7 +640,7 @@
           >
           <button
             type="submit"
-            class="bg-indigo-600 text-white rounded-r-lg py-2 px-4 text-sm hover:bg-indigo-700 focus:outline-none flex-shrink-0 w-10 h-10 flex items-center justify-center"
+            class="bg-indigo-600 text-white rounded-r-lg py-2 px-4 text-sm hover:bg-indigo-700 focus:outline-none flex items-center justify-center"
           >
             <i class="fas fa-paper-plane"></i>
           </button>
@@ -633,7 +649,7 @@
     </div>
   </div>
   
-  <!-- Add this script before the closing </body> tag -->
+  <!-- Chatbot JavaScript -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const chatbotToggle = document.getElementById('chatbot-toggle');
