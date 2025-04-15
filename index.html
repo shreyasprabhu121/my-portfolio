@@ -172,20 +172,20 @@
                         </div>
                         <div>
                             <div class="flex justify-between mb-2">
-                                <span class="font-medium">SQL & NoSQL</span>
-                                <span class="text-gray-600">88%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 88%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
                                 <span class="font-medium">GenAI</span>
                                 <span class="text-gray-600">75%</span>
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">SQL & NoSQL</span>
+                                <span class="text-gray-600">88%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 88%"></div>
                             </div>
                         </div>
                     </div>
@@ -218,10 +218,10 @@
                         <div>
                             <div class="flex justify-between mb-2">
                                 <span class="font-medium">CI/CD Pipelines</span>
-                                <span class="text-gray-600">82%</span>
+                                <span class="text-gray-600">75%</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-progress" style="width: 82%"></div>
+                                <div class="skill-progress" style="width: 75%"></div>
                             </div>
                         </div>
                         <div>
@@ -629,18 +629,18 @@
         </div>
       </div>
       
-      <!-- Chatbot Input Area - Fixed for mobile -->
-      <div class="border-t border-gray-200 p-3 bg-white">
-        <form id="chatbot-form" class="flex items-center">
+      <!-- Chatbot Input Area - Fixed for extremely narrow screens -->
+      <div class="border-t border-gray-200 p-2 bg-white">
+        <form id="chatbot-form" class="flex items-center gap-1">
           <input
             id="chatbot-input"
             type="text"
-            placeholder="Type your message..."
-            class="flex-1 border border-gray-300 rounded-l-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            placeholder="Type message..."
+            class="flex-1 min-w-0 border border-gray-300 rounded-l-lg py-2 px-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
           >
           <button
             type="submit"
-            class="bg-indigo-600 text-white rounded-r-lg py-2 px-4 text-sm hover:bg-indigo-700 focus:outline-none flex items-center justify-center"
+            class="bg-indigo-600 text-white rounded-r-lg p-2 text-sm hover:bg-indigo-700 focus:outline-none"
           >
             <i class="fas fa-paper-plane"></i>
           </button>
@@ -692,7 +692,15 @@
       
       // Handle window resize for mobile adjustments
       function handleResize() {
-        if (window.innerWidth < 640) { // Mobile breakpoint
+        if (window.innerWidth < 320) { // Extra small screens
+          chatbotDialog.style.maxWidth = '95vw';
+          chatbotDialog.style.right = '2.5vw';
+          // Adjust text overflow for tiny screens
+          const allMessages = document.querySelectorAll('#chatbot-messages p');
+          allMessages.forEach(msg => {
+            msg.style.wordBreak = 'break-word';
+          });
+        } else if (window.innerWidth < 640) { // Mobile breakpoint
           chatbotDialog.style.maxWidth = '90vw';
           chatbotDialog.style.right = '5vw';
         } else {
@@ -759,7 +767,7 @@
           messageDiv.classList.add('justify-end');
           messageDiv.innerHTML = `
             <div class="mr-2 bg-indigo-100 p-3 rounded-lg shadow-sm max-w-3/4">
-              <p class="text-gray-700 text-sm">${escapeHTML(content)}</p>
+              <p class="text-gray-700 text-sm" style="word-break: break-word;">${escapeHTML(content)}</p>
             </div>
             <div class="w-8 h-8 rounded-full bg-indigo-600 flex-shrink-0 flex items-center justify-center">
               <i class="fas fa-user text-xs text-white"></i>
@@ -771,7 +779,7 @@
               <i class="fas fa-robot text-xs text-white"></i>
             </div>
             <div class="ml-2 bg-white p-3 rounded-lg shadow-sm max-w-3/4">
-              <p class="text-gray-700 text-sm">${escapeHTML(content)}</p>
+              <p class="text-gray-700 text-sm" style="word-break: break-word;">${escapeHTML(content)}</p>
             </div>
           `;
         }
